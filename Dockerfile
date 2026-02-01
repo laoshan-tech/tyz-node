@@ -1,5 +1,5 @@
 # Build stage
-FROM oven/bun:slim AS builder
+FROM oven/bun:alpine AS builder
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ COPY . .
 RUN bun build --compile --bytecode --minify src/index.ts --outfile=dist/server
 
 # Production stage
-FROM oven/bun:slim
+FROM oven/bun:alpine
 
 WORKDIR /app
 
