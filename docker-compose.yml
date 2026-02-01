@@ -1,0 +1,35 @@
+services:
+  gost:
+    image: gogost/gost:latest
+    container_name: gost-node
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./config/gost.json:/etc/gost/config.json
+    command: -C /etc/gost/config.json
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:18080/api/config"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    environment:
+      - TZ=Asia/Shanghai
+
+  # Bun Service - Management and Monitoring
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tyz-node-app
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./.env:/app/.env
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:18090/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+

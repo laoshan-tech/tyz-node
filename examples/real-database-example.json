@@ -1,0 +1,222 @@
+{
+  "description": "基于真实数据库结构的配置示例 - schema=node",
+  "comment": "这是你的 Supabase Edge Function 需要返回的聚合数据格式",
+  "aggregated_data": {
+    "node": {
+      "id": 1,
+      "name": "relay-node-beijing",
+      "description": "北京中继节点",
+      "address": "192.168.1.100",
+      "disaply_address": "beijing.relay.example.com",
+      "token": "550e8400-e29b-41d4-a716-446655440000",
+      "level": 1,
+      "is_public": true,
+      "version": "1.0.0",
+      "egress_traffic": 2147483648,
+      "ingress_traffic": 1073741824,
+      "traffic_limit": 107374182400,
+      "enlarge_scale": 1,
+      "ports": "10000-20000",
+      "custom_cfg": null,
+      "user_id": "550e8400-e29b-41d4-a716-446655440001",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-15T10:30:00Z"
+    },
+    "rules": [
+      {
+        "id": 1,
+        "name": "HTTP代理规则",
+        "description": "HTTP流量转发",
+        "listen_port": 8080,
+        "tunnel_id": 1,
+        "targets": "target.example.com:80",
+        "status": "running",
+        "limit": {
+          "traffic": {
+            "service_in": 10485760,
+            "service_out": 20971520,
+            "conn_in": 1048576,
+            "conn_out": 2097152,
+            "ips": [
+              {
+                "ip": "192.168.1.50",
+                "in": 524288,
+                "out": 1048576
+              }
+            ]
+          },
+          "request": {
+            "service_rate": 100,
+            "ips": [
+              {
+                "ip": "192.168.1.50",
+                "rate": 10
+              }
+            ]
+          },
+          "connection": {
+            "service_limit": 1000,
+            "ips": [
+              {
+                "ip": "192.168.1.50",
+                "limit": 50
+              }
+            ]
+          }
+        },
+        "upload_traffic": 536870912,
+        "download_traffic": 1073741824,
+        "user_id": "550e8400-e29b-41d4-a716-446655440001",
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      },
+      {
+        "id": 2,
+        "name": "HTTPS代理规则",
+        "description": "HTTPS流量转发",
+        "listen_port": 8443,
+        "tunnel_id": 2,
+        "targets": "secure.example.com:443",
+        "status": "running",
+        "limit": null,
+        "upload_traffic": 268435456,
+        "download_traffic": 536870912,
+        "user_id": "550e8400-e29b-41d4-a716-446655440001",
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "tunnels": [
+      {
+        "id": 1,
+        "name": "HTTP隧道",
+        "description": "两跳HTTP隧道",
+        "ingress_disaply_address": "entry.example.com:80",
+        "user_id": "550e8400-e29b-41d4-a716-446655440001",
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      },
+      {
+        "id": 2,
+        "name": "TLS隧道",
+        "description": "三跳TLS加密隧道",
+        "ingress_disaply_address": null,
+        "user_id": "550e8400-e29b-41d4-a716-446655440001",
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "chains": [
+      {
+        "id": 1,
+        "tunnel_id": 1,
+        "node_id": 1,
+        "chain_type": "in",
+        "transport": "raw",
+        "index": 0,
+        "strategy": "round",
+        "port": 10001,
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      },
+      {
+        "id": 2,
+        "tunnel_id": 1,
+        "node_id": 2,
+        "chain_type": "out",
+        "transport": "raw",
+        "index": 1,
+        "strategy": "round",
+        "port": 0,
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      },
+      {
+        "id": 3,
+        "tunnel_id": 2,
+        "node_id": 1,
+        "chain_type": "in",
+        "transport": "tls",
+        "index": 0,
+        "strategy": "round",
+        "port": 10443,
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      },
+      {
+        "id": 4,
+        "tunnel_id": 2,
+        "node_id": 3,
+        "chain_type": "chain",
+        "transport": "grpc",
+        "index": 1,
+        "strategy": "round",
+        "port": 0,
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      },
+      {
+        "id": 5,
+        "tunnel_id": 2,
+        "node_id": 4,
+        "chain_type": "out",
+        "transport": "wss",
+        "index": 2,
+        "strategy": "round",
+        "port": 0,
+        "created_at": "2024-01-01T00:00:00Z",
+        "updated_at": "2024-01-15T10:30:00Z"
+      }
+    ],
+    "tls": {
+      "commonName": "relay.example.com",
+      "organization": "ExampleOrg"
+    }
+  },
+  "notes": {
+    "database_schema": "node",
+    "tables": {
+      "relay_nodes": "中继节点表 - 注意字段名为 egress_traffic/ingress_traffic 和 disaply_address",
+      "tunnels": "隧道表 - 字段名为 ingress_disaply_address",
+      "chains": "链表 - chain_type 和 transport 为字符串枚举类型",
+      "relay_rules": "中继规则表 - limit 为 JSON 对象"
+    },
+    "chain_type_enum": {
+      "in": "入口节点",
+      "chain": "中间节点",
+      "out": "出口节点"
+    },
+    "transport_enum": {
+      "raw": "直传 (无加密)",
+      "ws": "WebSocket",
+      "tls": "TLS加密",
+      "grpc": "gRPC",
+      "wss": "WebSocket Secure",
+      "mtls": "双向TLS",
+      "mwss": "Multiplexed WebSocket Secure"
+    },
+    "status_enum": {
+      "created": "创建中",
+      "paused": "暂停",
+      "running": "运行中",
+      "error": "错误"
+    }
+  },
+  "edge_function_example": {
+    "description": "你的 Supabase Edge Function 应该根据 node_id 查询并聚合以下数据",
+    "sql_logic": [
+      "1. 查询 node.relay_nodes WHERE id = $node_id",
+      "2. 查询 node.relay_rules WHERE node 相关 (通过 tunnel_id -> chains -> node_id)",
+      "3. 查询 node.tunnels WHERE id IN (rule.tunnel_id)",
+      "4. 查询 node.chains WHERE tunnel_id IN (...) ORDER BY index",
+      "5. 返回聚合的 JSON 对象 {node, rules, tunnels, chains, tls?}"
+    ],
+    "return_format": {
+      "node": "RelayNode object",
+      "rules": "RelayRule[] array",
+      "tunnels": "Tunnel[] array",
+      "chains": "Chain[] array",
+      "tls": "Optional {commonName, organization}"
+    }
+  }
+}
